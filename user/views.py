@@ -36,8 +36,19 @@ def register():
         if not user.name:
             flash('用户名不能为空')
             return redirect('/user/register/')
+        elif not 3 <= len(user.name) <= 12:
+            flash('用户名长度应在3~12位之间')
+            return redirect('/user/register/')
+
+        user.password = request.form.get('password')
+        if not user.password:
+            flash('密码不能为空')
+            return redirect('/user/register/')
+        elif not 6 <= len(user.password) <= 18:
+            flash('密码长度应在6~18位之间')
+            return redirect('/user/register/')
+        
         if request.form.get('password') == request.form.get('re_password'):
-            user.password = request.form.get('password')
             db.session.add(user)
             try:
                 db.session.commit()

@@ -26,12 +26,9 @@
             margin: 50px auto;
         }
 
-        .container {
-            margin-top: 30px;
-        }
     </style>
 {% endblock %}
-{% block pop_up %}
+{% block alter %}
     <div class="info">
         {% for info in get_flashed_messages() %}
             <div class="alert alert-info alert-dismissible" role="alert">

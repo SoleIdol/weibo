@@ -7,9 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="icon" href="../static/img/wb_icon.jpg">
-    <link rel="stylesheet" href="../static/css/bootstrap.css">
-    <script src="../static/js/jquery-3.5.1.js"></script>
+    <link rel="icon" href="/static/img/wb_icon.jpg">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/js/jquery-3.5.1.js"></script>
     <style>
         * {
             margin: 0;
@@ -23,6 +23,11 @@
             margin: 7px;
         }
 
+        .alter {
+            height: 80px;
+            width: 60%;
+            margin: auto;
+        }
     </style>
     <!-- 页面独有样式 -->
     {% block ext_css %}
@@ -79,6 +84,11 @@
         </nav>
     {% endblock %}
 </div>
+<!-- 消息弹框 -->
+<div class="alter">
+    {% block alter %}
+    {% endblock %}
+</div>
 <!-- 容器container -->
 <div class="container">
 
@@ -106,7 +116,7 @@
     {% endblock %}
 </div>
 <!-- 页面独有js -->
-<script src="../static/js/bootstrap.js"></script>
+<script src="/static/js/bootstrap.js"></script>
 {% block ext_js %}
 {% endblock %}
 </body>

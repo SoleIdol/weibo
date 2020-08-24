@@ -5,9 +5,10 @@
 {% extends 'base.html' %}
 {% block ext_css %}
     <style>
-        .form_div{
+        .form_div {
             border-right: 1px solid #dddddd;
         }
+
         .form {
             padding: 20px 60px 70px;
         }
@@ -24,13 +25,11 @@
             width: 100%;
             margin: 50px auto;
         }
-        .container{
-            margin-top: 30px;
-        }
+
     </style>
 {% endblock %}
 
-{% block pop_up %}
+{% block alter %}
     <div class="info">
         {% for info in get_flashed_messages() %}
             <div class="alert alert-info alert-dismissible" role="alert">
