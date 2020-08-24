@@ -1,9 +1,14 @@
 <!-- author:Sole_idol -->
 <!-- filename: index.html -->
 <!-- datetime:2020/8/22 10:55 -->
-{% extends 'base_user.html' %}
-
+{% extends 'base.html' %}
+{% block nav_son2 %}
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="/user/login/">登录</a></li>
+        <li><a href="/user/register/">注册</a></li>
+    </ul>
+{% endblock %}
 {% block container %}
-<h1>这是未登录用户页面</h1>
-<h1>也是近来的主页面</h1>
+    <h1>这是未登录用户页面</h1>
+    <h1>也是近来的主页面</h1>
 {% endblock %}

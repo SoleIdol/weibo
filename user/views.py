@@ -7,6 +7,7 @@ from libs.orm import db
 
 user_bp = Blueprint('user', __name__, url_prefix='/user/')
 user_bp.template_folder = './templates'
+user_bp.static_folder = '../static'
 
 
 @user_bp.route('/login/', methods=('POST', 'GET'))

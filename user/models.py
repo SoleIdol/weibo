@@ -15,4 +15,4 @@ class User(db.Model):
     gender = db.Column(db.Enum('男', '女', '保密'), default='保密')
     birthday = db.Column(db.Date, default='1997-2-10')
     city = db.Column(db.String(20))
-    reg_time = db.Column(db.Date, default=datetime.now())
+    reg_time = db.Column(db.DateTime, default=datetime.now())

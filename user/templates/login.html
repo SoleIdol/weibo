@@ -2,9 +2,12 @@
 <!-- filename: login.html -->
 <!-- datetime:2020/8/22 10:50 -->
 
-{% extends 'base_user.html' %}
+{% extends 'base.html' %}
 {% block ext_css %}
     <style>
+        .form_div{
+            border-right: 1px solid #dddddd;
+        }
         .form {
             padding: 20px 60px 70px;
         }
@@ -20,6 +23,9 @@
         .bg {
             width: 100%;
             margin: 50px auto;
+        }
+        .container{
+            margin-top: 30px;
         }
     </style>
 {% endblock %}
@@ -37,29 +43,44 @@
     </div>
 {% endblock %}
 
-{% block sidebar %}
-    <img src="../../static/img/bg01.jpg" class="bg" alt="">
+{% block nav_son2 %}
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="/user/login/">登录</a></li>
+        <li><a href="/user/register/">注册</a></li>
+    </ul>
 {% endblock %}
 
-{% block content %}
-    <p class="hy">欢迎登录</p>
-    <form action="/user/login/" method="post" class="form">
-        <div class="form-group">
-            <label for="exampleInputEmail1">用户名</label>
-            <input type="text" name="u_name" class="form-control" id="exampleInputEmail1" placeholder="请输入用户名">
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">密码</label>
-            <input type="password" name="password" class="form-control" id="exampleInputPassword1"
-                   placeholder="请输入密码">
+{% block container %}
+    <div class="row container">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
+            <img src="../../static/img/bg01.jpg" class="bg" alt="">
         </div>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="miss"> <span>记住我</span>
-            </label>
+        <div class="col-md-5 form_div">
+            <p class="hy">欢迎登录</p>
+            <form action="/user/login/" method="post" class="form">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">用户名</label>
+                    <input type="text" name="u_name" class="form-control" id="exampleInputEmail1" placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">密码</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                           placeholder="请输入密码">
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="miss"> <span>记住我</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default">登录</button>
+                <button type="reset" class="btn btn-default">重置</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-default">登录</button>
-        <button type="reset" class="btn btn-default">重置</button>
-    </form>
+        <div class="col-md-1"></div>
+    </div>
+
 {% endblock %}
+
