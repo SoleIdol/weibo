@@ -23,11 +23,20 @@
             margin: 7px;
         }
 
-        .alter {
-            height: 80px;
-            width: 60%;
-            margin: auto;
+        .container{
+            clear: both;
         }
+
+        .sidebar_l, .sidebar_r {
+            padding-bottom: 50px;
+            background-color: #eeeeee;
+        }
+
+        .content {
+            padding-bottom: 20px;
+            background-color: #f5f5f5;
+        }
+
     </style>
     <!-- 页面独有样式 -->
     {% block ext_css %}
@@ -48,8 +57,14 @@
 
                     {% block nav_son1 %}
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="/">首页</a></li>
-                            <li><a href="#">发表博客</a></li>
+                            <li class="active"><a href="/user/main_my/">首页</a></li>
+                            <li><a href="#">视频</a></li>
+                            <li><a href="#">发现</a></li>
+                            <li><a href="#">游戏</a></li>
+                            <li><a href="#">同城</a></li>
+                            <li><a href="#">关注</a></li>
+                            <li><a href="/weibo/edit/">发表</a></li>
+                            <li><a href="#">已发布</a></li>
                         </ul>
                         <form action="#" class="navbar-form navbar-left">
                             <div class="form-group">
@@ -63,17 +78,17 @@
                     {% endblock %}
                     {% block nav_son2 %}
                         <ul class="nav navbar-nav navbar-right">
-                            <li><img class="icon_my" src="../static/img/def_icon.jpg" alt="暂无头像"></li>
-                            <li><a href="#">{{ u_name }}</a></li>
+                            <li><img class="icon_my" src="../static/upload/img/{{ user.head }}" alt="暂无头像"></li>
+                            <li><a href="#">{{ user.name }}</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                    aria-haspopup="true" aria-expanded="false">个人中心<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">用户信息</a></li>
+                                    <li><a href="/user/info/">用户信息</a></li>
                                     <li><a href="#">修改密码</a></li>
                                     <li><a href="#">朋友圈</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/">退出登录</a></li>
+                                    <li><a href="/user/logout/">退出登录</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -85,28 +100,41 @@
     {% endblock %}
 </div>
 <!-- 消息弹框 -->
-<div class="alter">
-    {% block alter %}
-    {% endblock %}
-</div>
+{% block alter %}
+{% endblock %}
 <!-- 容器container -->
 <div class="container">
 
     {% block container %}
-
-        <!-- 边栏sidebar -->
-        <div class="sidebar">
-            {% block sidebar %}
-                <h1>侧边栏</h1>
-            {% endblock %}
+        <div class="row">
+            <div class="col-md-2">
+                <!-- 边栏sidebar -->
+                <div class="sidebar_l">
+                    {% block sidebar_l %}
+                        <p>侧边栏</p>
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <!-- 内容区content -->
+                <div class="content">
+                    {% block content %}
+                        <p>内容区</p>
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-md-2">
+                <!-- 边栏sidebar -->
+                <div class="sidebar_r">
+                    {% block sidebar_r %}
+                        <p>侧边栏</p>
+                    {% endblock %}
+                </div>
+            </div>
         </div>
 
-        <!-- 内容区content -->
-        <div class="content">
-            {% block content %}
-                <h1>内容区</h1>
-            {% endblock %}
-        </div>
+
+
 
     {% endblock %}
 </div>

@@ -39,7 +39,7 @@ def register():
         elif not 3 <= len(user.name) <= 12:
             flash('用户名长度应在3~12位之间')
             return redirect('/user/register/')
-
+        
         user.password = request.form.get('password')
         if not user.password:
             flash('密码不能为空')
@@ -68,10 +68,21 @@ def register():
 
 @user_bp.route('/main_my/')
 def main_my():
-    return render_template('main_my.html', title='用户博客界面', u_name=session.get('u_name'))
+    if session.get('u_name'):
+        user = User.query.filter_by(name=session.get('u_name')).one()
+        return render_template('main_my.html', title='用户博客界面', user=user)
+    else:
+        flash('你还没有登录，请先登录...')
+        return redirect('/user/login/')
+
+
+@user_bp.route('/info/')
+def user_info():
+    user = User.query.filter_by(name=session.get('u_name')).one()
+    return render_template('user_info.html', title='用户信息', user=user)
 
 
 @user_bp.route('/logout/')
 def logout():
     session.pop('u_name')
-    return redirect('/login/')
+    return redirect('/user/login/')

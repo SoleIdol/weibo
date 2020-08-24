@@ -2,13 +2,32 @@
 <!-- filename: index.html -->
 <!-- datetime:2020/8/22 10:55 -->
 {% extends 'base.html' %}
+
+{% block nav_son1 %}
+    <ul class="nav navbar-nav">
+        <li class="active"><a href="/">首页</a></li>
+        <li><a href="#">视频</a></li>
+        <li><a href="#">发现</a></li>
+        <li><a href="#">游戏</a></li>
+        <li><a href="#">同城</a></li>
+    </ul>
+    <form action="#" class="navbar-form navbar-left">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="搜索">
+        </div>
+        <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+    </form>
+{% endblock %}
+
 {% block nav_son2 %}
     <ul class="nav navbar-nav navbar-right">
         <li><a href="/user/login/">登录</a></li>
         <li><a href="/user/register/">注册</a></li>
     </ul>
 {% endblock %}
-{% block container %}
-    <h1>这是未登录用户页面</h1>
-    <h1>也是近来的主页面</h1>
-{% endblock %}
+{#{% block container %}#}
+{#    <h1>这是未登录用户页面</h1>#}
+{#    <h1>也是近来的主页面</h1>#}
+{#{% endblock %}#}

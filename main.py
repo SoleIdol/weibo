@@ -9,6 +9,7 @@ from flask_migrate import Migrate, MigrateCommand
 
 from libs.orm import db
 from user.views import user_bp
+from weibo_t.views import weibo_bp
 
 app = Flask(__name__)
 
@@ -23,6 +24,7 @@ manage.add_command('db', MigrateCommand)
 
 # 注册蓝图
 app.register_blueprint(user_bp)
+app.register_blueprint(weibo_bp)
 
 
 @app.route('/')
