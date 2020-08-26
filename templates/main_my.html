@@ -115,7 +115,9 @@
                     {% endif %}
 
                     {% for i in pages %}
-                        <li><a href="/user/main_my/?page={{ i }}">{{ i }}</a></li>
+                        <li {% if i == page %} class="active" {% endif %} >
+                            <a href="/user/main_my/?page={{ i }}">{{ i }}</a>
+                        </li>
                     {% endfor %}
                     {% if end < max_page %}
                         <li><a href="#">...</a></li>
