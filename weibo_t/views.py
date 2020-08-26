@@ -47,3 +47,9 @@ def edit():
     else:
         flash('你还没有登录，请先登录...')
         return redirect('/user/login/')
+
+
+@weibo_bp.route('/update/')
+@login_required
+def update():
+    return '编辑'

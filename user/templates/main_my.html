@@ -15,7 +15,13 @@
         }
 
         .father {
-            padding: 20px 30px;
+            padding: 30px;
+        }
+
+        .user {
+            border-top: 1px inset #bbb;
+            padding-top: 10px;
+            border-radius: 3px;
         }
 
         .son {
@@ -23,7 +29,38 @@
         }
 
         .weibo_content {
-            padding: 5px 36px;
+            padding: 15px 36px;
+        }
+
+        .username {
+            font-size: 22px;
+            margin: 0 10px;
+            color: #444;
+        }
+
+        .uptime {
+            color: #999;
+        }
+
+        .handle {
+            text-align: right;
+            padding: 5px 20px;
+            margin: 5px 0;
+        }
+
+        .talk {
+            border-top: 1px solid #bbb;
+            padding: 10px;
+        }
+
+        .handle a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .up_img {
+            width: 260px;
+            padding: 10px 3px;
         }
     </style>
 {% endblock %}
@@ -38,15 +75,24 @@
                     <span class="uptime">{{ wuser.Weibo.up_time }}</span>
                 </div>
                 <div class="weibo_content">
-                    {{ wuser.Weibo.title }}
-                    <br>
-                    {{ wuser.Weibo.content }}
-                    <hr>
+                    <div>{{ wuser.Weibo.content }}</div>
+                    {% if wuser.Weibo.filename %}
+                        <div>
+                            <img src="/static/upload/img/{{ wuser.Weibo.filename }}" class="up_img">
+                        </div>
+                    {% endif %}
+                    {% if wuser.Weibo.uid==user.id %}
+                        <div class="handle">
+                            <p>
+                                <button type="button" class="btn btn-info btn-xs"><a href="/weibo/update/?wid={{ wuser.Weibo.id }}">编辑</a></button>
+                                <button type="button" class="btn btn-danger btn-xs"><a href="#">删除</a></button>
+                            </p>
+                        </div>
+                    {% endif %}
                     <div class="talk">
                         评论区
                     </div>
                 </div>
-
             </div>
         {% endfor %}
     </div>
