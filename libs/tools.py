@@ -2,6 +2,7 @@ import os
 from hashlib import md5, sha256
 from flask import session, flash, redirect
 from functools import wraps
+import random
 
 
 def make_password(password):
@@ -98,3 +99,9 @@ def login_required(fn):
             return redirect('/user/login/')
     
     return check_session
+
+
+def random_zh_str(length):
+    '''随机产生出一个中文字符串'''
+    words = [chr(random.randint(20000, 30000)) for i in range(length)]
+    return ''.join(words)

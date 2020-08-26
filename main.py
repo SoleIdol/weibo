@@ -38,5 +38,11 @@ def main():
     return render_template('index.html', title='blog博客', weibo_user=weibo_user)
 
 
+@manage.command
+def create_test():
+    users = User.make_users(50)
+    Weibo.make_weibo(2000, users)
+
+
 if __name__ == '__main__':
     manage.run()

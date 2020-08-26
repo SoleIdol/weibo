@@ -88,7 +88,7 @@ def main_my():
     offset = per_page * (page - 1)
     # 联合User Weibo两个表
     weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(
-        Weibo.up_time.desc()).limit(page).offset(offset).all()
+        Weibo.up_time.desc()).limit(per_page).offset(offset).all()
     
     max_page = ceil(Weibo.query.count() / per_page)
     if max_page <= 7:
