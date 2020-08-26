@@ -5,7 +5,7 @@ from weibo_t.models import Weibo
 from user.models import User
 from libs.orm import db
 from libs.tools import login_required, save_file
-from libs.sqltools import session_add, session_update1
+from libs.sqltools import session_add, session_update1, session_deleter
 
 weibo_bp = Blueprint('weibo', __name__, url_prefix='/weibo/')
 weibo_bp.template_folder = './templates'
@@ -89,3 +89,15 @@ def update():
     else:
         flash('这不是你的文章，你不能编辑!')
         return redirect('/user/main_my/')
+
+
+@weibo_bp.route('/delete/')
+def delete():
+    if not request.args.get('wid'):
+        flash('缺少必要参数')
+        return redirect('/user/main_my/')
+    wid = int(request.args.get('wid'))
+    weibo = Weibo.query.get(wid)
+    session_deleter(weibo)
+    flash('你的微博删除成功!')
+    return redirect('/user/main_my/')
