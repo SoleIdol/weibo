@@ -2,6 +2,7 @@
 # filename: views.py
 # datetime:2020/8/22 9:38
 from flask import Blueprint, render_template, redirect, request, flash, session
+from math import ceil
 
 from user.models import User
 from weibo_t.models import Weibo
@@ -81,11 +82,27 @@ def main_my():
     except:
         flash('后台未检测到你的存在，请重新登录...')
         return redirect('/user/login/')
+    
+    page = int(request.args.get('page', 1))
+    per_page = 30
+    offset = per_page * (page - 1)
     # 联合User Weibo两个表
     weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(
-        Weibo.up_time.desc()).all()
-    # print(dir(weibo_user[0].User))
-    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user)
+        Weibo.up_time.desc()).limit(page).offset(offset).all()
+    
+    max_page = ceil(Weibo.query.count() / per_page)
+    if max_page <= 7:
+        start, end = 1, max_page
+    elif page <= 3:
+        start, end = 1, 7
+    elif page > (max_page - 3):
+        start, end = max_page - 6, max_page
+    else:
+        start, end = (page - 3), (page + 3)
+    pages = range(start, end + 1)
+    
+    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user,
+                           pages=pages, page=page, start=start, end=end, max_page=max_page)
 
 
 @user_bp.route('/info/', methods=('POST', 'GET'))

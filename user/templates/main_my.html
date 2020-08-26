@@ -62,6 +62,10 @@
             width: 260px;
             padding: 10px 3px;
         }
+
+        .page_nav {
+            text-align: center;
+        }
     </style>
 {% endblock %}
 
@@ -86,7 +90,8 @@
                             <p>
                                 <button type="button" class="btn btn-info btn-xs"><a
                                         href="/weibo/update/?wid={{ wuser.Weibo.id }}">编辑</a></button>
-                                <button type="button" class="btn btn-danger btn-xs"><a href="/weibo/delete/?wid={{ wuser.Weibo.id }}">删除</a></button>
+                                <button type="button" class="btn btn-danger btn-xs"><a
+                                        href="/weibo/delete/?wid={{ wuser.Weibo.id }}">删除</a></button>
                             </p>
                         </div>
                     {% endif %}
@@ -95,6 +100,35 @@
                     </div>
                 </div>
             </div>
+            <!-- 分页显示器 -->
+            <div class="page_nav">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if start >1 %}
+                            <li>
+                                <a href="/user/main_my/?page={{ page - 1 }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li><a href="#">...</a></li>
+                        {% endif %}
+
+                        {% for i in pages %}
+                            <li><a href="/user/main_my/?page={{ i }}">{{ i }}</a></li>
+                        {% endfor %}
+                        {% if end < max_page %}
+                            <li>
+                                <a href="/user/main_my/?page={{ page + 1 }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <li><a href="#">...</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         {% endfor %}
+
+
     </div>
 {% endblock %}
