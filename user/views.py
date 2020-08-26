@@ -6,8 +6,8 @@ from flask import Blueprint, render_template, redirect, request, flash, session
 from user.models import User
 from weibo_t.models import Weibo
 from libs.orm import db
-from libs.tools import login_required, save_file, del_head
-from libs.sqltools import session_add
+from libs.tools import login_required, save_file, del_head, make_password, check_password
+from libs.sqltools import session_add, session_update1
 
 user_bp = Blueprint('user', __name__, url_prefix='/user/')
 user_bp.template_folder = './templates'
@@ -19,7 +19,9 @@ def login():
     if request.method == 'POST':
         name = request.form.get('u_name')
         try:
-            if request.form.get('password') == User.query.filter_by(name=name).one().password:
+            password = request.form.get('password')
+            safe_password = User.query.filter_by(name=name).one().password
+            if check_password(password, safe_password):
                 session['u_name'] = name
                 return redirect('/user/main_my/')
             else:
@@ -44,15 +46,16 @@ def register():
             flash('用户名长度应在3~12位之间')
             return redirect('/user/register/')
         
-        user.password = request.form.get('password')
-        if not user.password:
+        password = request.form.get('password')
+        if not password:
             flash('密码不能为空')
             return redirect('/user/register/')
-        elif not 6 <= len(user.password) <= 18:
+        elif not 6 <= len(password) <= 18:
             flash('密码长度应在6~18位之间')
             return redirect('/user/register/')
         
         if request.form.get('password') == request.form.get('re_password'):
+            user.password = make_password(password)
             db.session.add(user)
             try:
                 db.session.commit()
@@ -82,7 +85,7 @@ def main_my():
     weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(
         Weibo.up_time.desc()).all()
     # print(dir(weibo_user[0].User))
-    return render_template('main_my.html', title='用户博客界面',user=user, weibo_user=weibo_user)
+    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user)
 
 
 @user_bp.route('/info/', methods=('POST', 'GET'))
@@ -112,7 +115,7 @@ def user_info():
             user.gender = request.form.get('gender')
             user.city = request.form.get('city')
             user.birthday = request.form.get('birthday')
-            if session_add(user):
+            if session_update1(user):
                 flash('信息修改成功')
                 session['u_name'] = user.name
             else:

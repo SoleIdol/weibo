@@ -27,8 +27,8 @@ def make_password(password):
 def check_password(password, safe_password):
     """
     密码验证
-    :param password:
-    :param safe_password:
+    :param password:页面输入的密码
+    :param safe_password:数据库中的密码
     :return: Boolean
     """
     if not isinstance(password, bytes):
