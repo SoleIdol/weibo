@@ -10,6 +10,8 @@ from flask_migrate import Migrate, MigrateCommand
 from libs.orm import db
 from user.views import user_bp
 from weibo_t.views import weibo_bp
+from user.models import User
+from weibo_t.models import Weibo
 
 app = Flask(__name__)
 
@@ -29,7 +31,11 @@ app.register_blueprint(weibo_bp)
 
 @app.route('/')
 def main():
-    return render_template('index.html', title='blog博客')
+    # 联合User Weibo两个表
+    weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(
+        Weibo.up_time.desc()).all()
+    
+    return render_template('index.html', title='blog博客', weibo_user=weibo_user)
 
 
 if __name__ == '__main__':

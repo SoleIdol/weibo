@@ -73,17 +73,26 @@ def register():
 @user_bp.route('/main_my/')
 @login_required
 def main_my():
-    user = User.query.filter_by(name=session.get('u_name')).one()
+    try:
+        user = User.query.filter_by(name=session.get('u_name')).one()
+    except:
+        flash('后台未检测到你的存在，请重新登录...')
+        return redirect('/user/login/')
     # 联合User Weibo两个表
-    weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(Weibo.up_time.desc()).all()
+    weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(
+        Weibo.up_time.desc()).all()
     # print(dir(weibo_user[0].User))
-    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user)
+    return render_template('main_my.html', title='用户博客界面',user=user, weibo_user=weibo_user)
 
 
 @user_bp.route('/info/', methods=('POST', 'GET'))
 @login_required
 def user_info():
-    user = User.query.filter_by(name=session.get('u_name')).one()
+    try:
+        user = User.query.filter_by(name=session.get('u_name')).one()
+    except:
+        flash('后台未检测到你的存在，请重新登录...')
+        return redirect('/user/login/')
     if request.method == 'POST':
         
         user.name = request.form.get('name')

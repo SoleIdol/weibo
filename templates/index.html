@@ -3,9 +3,33 @@
 <!-- datetime:2020/8/22 10:55 -->
 {% extends 'base.html' %}
 
+{% block ext_css %}
+    <style>
+
+
+        .head_icon {
+            width: 36px;
+            border: 1px outset gray;
+            border-radius: 4px;
+        }
+
+        .father {
+            padding: 20px 30px;
+        }
+
+        .son {
+            padding: 10px;
+        }
+
+        .weibo_content {
+            padding: 5px 36px;
+        }
+    </style>
+{% endblock %}
+
 {% block nav_son1 %}
     <ul class="nav navbar-nav">
-        <li class="active"><a href="/user/main_my/">首页</a></li>
+        <li class="active"><a href="/">首页</a></li>
         <li><a href="#">视频</a></li>
         <li><a href="#">发现</a></li>
         <li><a href="#">游戏</a></li>
@@ -26,4 +50,28 @@
         <li><a href="/user/login/">登录</a></li>
         <li><a href="/user/register/">注册</a></li>
     </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="father">
+        {% for wuser in weibo_user %}
+            <div class="son">
+                <div class="user">
+                    <img src="/static/upload/img/{{ wuser.User.head }}" class="head_icon" alt="无头像">
+                    <span class="username">{{ wuser.User.name }}</span>
+                    <span class="uptime">{{ wuser.Weibo.up_time }}</span>
+                </div>
+                <div class="weibo_content">
+                    {{ wuser.Weibo.title }}
+                    <br>
+                    {{ wuser.Weibo.content }}
+                    <hr>
+                    <div class="talk">
+                        评论区
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
