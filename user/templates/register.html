@@ -26,26 +26,13 @@
             margin: 50px auto;
         }
 
-        .info {
-            height: 80px;
-            width: 60%;
-            margin: auto;
+        .container {
+            margin-top: 36px;
         }
 
     </style>
 {% endblock %}
-{% block alter %}
-    <div class="info">
-        {% for info in get_flashed_messages() %}
-            <div class="alert alert-info alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span>
-                </button>
-                {{ info }}
-            </div>
-        {% endfor %}
-    </div>
-{% endblock %}
+
 
 {% block nav_son1 %}
     <ul class="nav navbar-nav">

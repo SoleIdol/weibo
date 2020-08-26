@@ -6,12 +6,13 @@ class Weibo(db.Model):
     __tablename__ = 'weibo'
     
     id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer)
-    u_name = db.Column(db.String(10))
-    title = db.Column(db.String(30))
+    uid = db.Column(db.Integer, index=True, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    zan_num = db.Column(db.Integer)
-    up_time = db.Column(db.DateTime, default=datetime.now())
+    filename = db.Column(db.String(256))
+    zan_num = db.Column(db.Integer, default=0)
+    public = db.Column(db.Boolean, default=True)  # 默认公开
+    cr_time = db.Column(db.DateTime)
+    up_time = db.Column(db.DateTime)
 
 
 class Message(db.Model):

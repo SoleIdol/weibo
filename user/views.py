@@ -2,8 +2,12 @@
 # filename: views.py
 # datetime:2020/8/22 9:38
 from flask import Blueprint, render_template, redirect, request, flash, session
+
 from user.models import User
+from weibo_t.models import Weibo
 from libs.orm import db
+from libs.tools import login_required, save_file, del_head
+from libs.sqltools import session_add
 
 user_bp = Blueprint('user', __name__, url_prefix='/user/')
 user_bp.template_folder = './templates'
@@ -67,22 +71,49 @@ def register():
 
 
 @user_bp.route('/main_my/')
+@login_required
 def main_my():
-    if session.get('u_name'):
-        user = User.query.filter_by(name=session.get('u_name')).one()
-        return render_template('main_my.html', title='用户博客界面', user=user)
-    else:
-        flash('你还没有登录，请先登录...')
-        return redirect('/user/login/')
+    user = User.query.filter_by(name=session.get('u_name')).one()
+    # 联合User Weibo两个表
+    weibo_user = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id).filter().order_by(Weibo.up_time.desc()).all()
+    # print(dir(weibo_user[0].User))
+    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user)
 
 
-@user_bp.route('/info/')
+@user_bp.route('/info/', methods=('POST', 'GET'))
+@login_required
 def user_info():
     user = User.query.filter_by(name=session.get('u_name')).one()
-    return render_template('user_info.html', title='用户信息', user=user)
+    if request.method == 'POST':
+        
+        user.name = request.form.get('name')
+        if not user.name:
+            flash('用户名不能为空')
+        elif not 3 <= len(user.name) <= 12:
+            flash('用户名长度应在3~12位之间')
+        else:
+            file = request.files.get('head')
+            if file:
+                # # 删除原本头像 这里因为图片一样时，保存同一个，所以不能删除
+                # del_head(user.head)
+                #
+                # 保存头像
+                filename = save_file(file)
+                user.head = filename
+            user.gender = request.form.get('gender')
+            user.city = request.form.get('city')
+            user.birthday = request.form.get('birthday')
+            if session_add(user):
+                flash('信息修改成功')
+                session['u_name'] = user.name
+            else:
+                flash('信息修改失败')
+        return render_template('user_info.html', title='用户信息', user=user)
+    else:
+        return render_template('user_info.html', title='用户信息', user=user)
 
 
 @user_bp.route('/logout/')
 def logout():
-    session.pop('u_name')
+    session.clear()
     return redirect('/user/login/')
