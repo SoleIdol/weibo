@@ -75,7 +75,7 @@
                     <span class="uptime">{{ wuser.Weibo.up_time }}</span>
                 </div>
                 <div class="weibo_content">
-                    <div>{{ wuser.Weibo.content }}</div>
+                    <div>{{ wuser.Weibo.content | replace('\n','<br>') | safe }}</div>
                     {% if wuser.Weibo.filename %}
                         <div>
                             <img src="/static/upload/img/{{ wuser.Weibo.filename }}" class="up_img">
@@ -84,7 +84,8 @@
                     {% if wuser.Weibo.uid==user.id %}
                         <div class="handle">
                             <p>
-                                <button type="button" class="btn btn-info btn-xs"><a href="/weibo/update/?wid={{ wuser.Weibo.id }}">编辑</a></button>
+                                <button type="button" class="btn btn-info btn-xs"><a
+                                        href="/weibo/update/?wid={{ wuser.Weibo.id }}">编辑</a></button>
                                 <button type="button" class="btn btn-danger btn-xs"><a href="#">删除</a></button>
                             </p>
                         </div>

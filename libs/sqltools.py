@@ -32,6 +32,20 @@ def session_add_all(users):
         return False
 
 
+def session_update1(user):
+    """
+    更新提交数据
+    :param user:
+    :return: Boolean
+    """
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        return False
+
+
 def session_deleter(user):
     """
     删除一条数据
