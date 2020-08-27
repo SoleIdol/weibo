@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, flash, session
 from datetime import datetime
 
-from weibo_t.models import Weibo,Message
+from weibo_t.models import Weibo, Message
 from user.models import User
 from libs.orm import db
 from libs.tools import login_required, save_file
@@ -133,6 +133,7 @@ def send_message():
     message.up_time = datetime.now()
     
     if session_add(message):
-        return '评论成功'
+        flash('评论成功')
     else:
-        return '评论失败'
+        flash('评论失败')
+    return redirect('/user/main_my/')

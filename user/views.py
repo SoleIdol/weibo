@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, redirect, request, flash, session
 from math import ceil
 
 from user.models import User
-from weibo_t.models import Weibo
+from weibo_t.models import Weibo, Message
 from libs.orm import db
 from libs.tools import login_required, save_file, del_head, make_password, check_password
 from libs.sqltools import session_add, session_update1
@@ -100,8 +100,12 @@ def main_my():
     else:
         start, end = (page - 3), (page + 3)
     pages = range(start, end + 1)
-    
-    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user,
+    wb_list = [wu.Weibo.id for wu in weibo_user]
+    # 注意，这里有个范围查询 in_()
+    msgs = Message.query.filter(Message.fid.in_(wb_list)).order_by(Message.up_time.desc()).all()
+    for i in msgs:
+        print(i.content)
+    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user, msgs=msgs,
                            pages=pages, page=page, start=start, end=end, max_page=max_page)
 
 

@@ -4,6 +4,7 @@ import random
 from libs.orm import db
 from libs.tools import random_zh_str
 from libs.sqltools import session_add_all
+from user.models import User
 
 
 class Weibo(db.Model):
@@ -42,8 +43,20 @@ class Message(db.Model):
     __tablename__ = 'message'
     
     id = db.Column(db.Integer, primary_key=True)
-    fid = db.Column(db.Integer)   # 微博id
-    iid = db.Column(db.Integer)   # 当前评论人id
-    yid = db.Column(db.Integer)   # 评论对象的id
+    fid = db.Column(db.Integer)  # 微博id
+    iid = db.Column(db.Integer)  # 当前评论人id
+    yid = db.Column(db.Integer)  # 评论对象的id
     content = db.Column(db.Text, nullable=False)
     up_time = db.Column(db.DateTime, default=datetime.now())  # 评论时间
+    
+    @property
+    def y_user(self):
+        return User.query.get(self.yid)
+    
+    @property
+    def i_user(self):
+        return User.query.get(self.iid)
+    
+    @classmethod
+    def by_wid(cls, fid):
+        return Weibo.query.get(fid)

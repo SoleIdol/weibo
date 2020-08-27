@@ -51,6 +51,7 @@
         }
 
         .message {
+            clear: both;
             padding: 10px 15px;
         }
 
@@ -62,12 +63,13 @@
         }
 
         .u_u1 {
-            font-size: 13px;
+            font-size: 14px;
             color: #449d44;
         }
 
         .u_m {
-            font-size: 12px;
+            font-size: 13px;
+            margin-top: 8px;
         }
 
         a {
@@ -88,6 +90,12 @@
             width: 100%;
             text-align: right;
             padding: 5px 10px;
+        }
+
+        .msg_time {
+            font-size: 10px;
+            color: #bbb;
+            top: -10px;
         }
 
     </style>
@@ -124,22 +132,26 @@
                     <div class="talk">
                         <div class="zan">
 
+                            <span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+                            {{ wuser.Weibo.zan_num }}
+
+                            &nbsp;&nbsp;&nbsp;
+
+                            <button type="button" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>点赞
+                            </button>
 
                             <button type="button" class="btn btn-default btn-xs "
                                     onclick="show_p({{ wuser.Weibo.id }})">
-                                <div class="show_pf-1{{ wuser.Weibo.id }}">
+                                <div class="show_pf-f{{ wuser.Weibo.id }}">
                                     <span class="glyphicon glyphicon-menu-down "></span>评论
                                 </div>
-                                <div class="show_pf-2{{ wuser.Weibo.id }}" hidden>
+                                <div class="show_pf-t{{ wuser.Weibo.id }}" hidden>
                                     <span class="glyphicon glyphicon-menu-up "></span>评论
                                 </div>
 
                             </button>
 
-
-                            <button type="button" class="btn btn-default btn-xs">
-                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>点赞
-                            </button>
 
                             {% if wuser.Weibo.uid==user.id %}
                                 <button type="button" class="btn btn-info btn-xs"><a
@@ -150,6 +162,8 @@
                         </div>
 
                         <div class="show_pf{{ wuser.Weibo.id }}" hidden>
+
+                            <!-- 直接评论微博时 -->
                             <form action="/weibo/send_message/" method="post">
                                 <div class="form-group col-sm-8">
                                     <input type="text" class="form-control" name="m_content" placeholder="评论">
@@ -160,23 +174,41 @@
                                 </div>
                                 <button type="submit" class="btn btn-default">发送评论</button>
                             </form>
-                            <div class="message">
-                                评论区
-                                <div class="media">
-                                    <div class="media-left">
-                                        <a href="#">
-                                            <img class="media-object message_icon" src="/static/upload/img/default.jpg"
-                                                 alt="...">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="u_u1">谁谁谁回复了谁谁谁</p>
-                                        <div class="u_m">
-                                            这个文章真好
-                                        </div>
 
-                                    </div>
-                                </div>
+                            <!-- 评论区 -->
+                            <div class="message">
+                                {% for msg in msgs %}
+                                    {% if msg.fid == wuser.Weibo.id %}
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="#">
+                                                    <img class="media-object message_icon"
+                                                         src="/static/upload/img/{{ msg.i_user.head }}"
+                                                         alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+
+                                                <span class="u_u1">{{ msg.i_user.name }} 回复了 {{ msg.y_user.name }}</span>
+
+                                                <span class="msg_time">{{ msg.up_time }}</span>
+
+                                                <button class="btn btn-default btn-xs"
+                                                        onclick="reply(this)" yid="{{ msg.i_user.id }}"
+                                                        yname="'{{ msg.i_user.name }}">
+                                                    回复
+                                                </button>
+
+                                                <div class="u_m">
+                                                    {{ msg.content }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+
                             </div>
                         </div>
                     </div>
@@ -223,30 +255,39 @@
         var gz_flag = false
 
         function guan_zhu(uid) {
-
-            if (gz_flag) {
-                $('.guan_zhu_f' + uid).attr('hidden', false)
-                $('.guan_zhu_t' + uid).attr('hidden', true)
-            } else {
-                $('.guan_zhu_f' + uid).attr('hidden', true)
-                $('.guan_zhu_t' + uid).attr('hidden', false)
-            }
             gz_flag = !gz_flag
+            if (gz_flag) {
+                $('.guan_zhu_t' + uid).attr('hidden', false)
+                $('.guan_zhu_f' + uid).attr('hidden', true)
+            } else {
+                $('.guan_zhu_t' + uid).attr('hidden', true)
+                $('.guan_zhu_f' + uid).attr('hidden', false)
+            }
+
         }
 
 
         function show_p(wid) {
-
-            if (show_flag) {
-                $('.show_pf' + wid).attr('hidden', show_flag)
-                $('.show_pf-1' + wid).attr('hidden', false)
-                $('.show_pf-2' + wid).attr('hidden', true)
-            } else {
-                $('.show_pf' + wid).attr('hidden', show_flag)
-                $('.show_pf-1' + wid).attr('hidden', true)
-                $('.show_pf-2' + wid).attr('hidden', false)
-            }
             show_flag = !show_flag
+            if (show_flag) {
+                {# 显示评论区 #}
+                console.log('xianshi');
+                $('.show_pf' + wid).attr('hidden', !show_flag)
+                $('.show_pf-t' + wid).attr('hidden', false)
+                $('.show_pf-f' + wid).attr('hidden', true)
+
+            } else {
+                $('.show_pf' + wid).attr('hidden', !show_flag)
+                $('.show_pf-t' + wid).attr('hidden', true)
+                $('.show_pf-f' + wid).attr('hidden', false)
+            }
+
         }
+
+        function reply(yuser) {
+            $('input[name=m_yid]').val($(yuser).attr('yid'))
+            $('input[name=m_content]').attr('placeholder', '回复' + $(yuser).attr('yname'))
+        }
+
     </script>
 {% endblock %}
