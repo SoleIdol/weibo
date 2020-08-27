@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, flash, session
 from datetime import datetime
 
-from weibo_t.models import Weibo
+from weibo_t.models import Weibo,Message
 from user.models import User
 from libs.orm import db
 from libs.tools import login_required, save_file
@@ -15,6 +15,10 @@ weibo_bp.static_folder = '../static'
 @weibo_bp.route('/edit/', methods=('POST', 'GET'))
 @login_required
 def edit():
+    """
+    发表编辑微博
+    :return:
+    """
     try:
         user = User.query.filter_by(name=session.get('u_name')).one()
     except:
@@ -55,6 +59,10 @@ def edit():
 @weibo_bp.route('/update/', methods=('POST', 'GET'))
 @login_required
 def update():
+    """
+    修改微博
+    :return:
+    """
     if not request.args.get('wid'):
         flash('缺少必要参数')
         return redirect('/user/main_my/')
@@ -93,6 +101,10 @@ def update():
 
 @weibo_bp.route('/delete/')
 def delete():
+    """
+    删除微博
+    :return:
+    """
     if not request.args.get('wid'):
         flash('缺少必要参数')
         return redirect('/user/main_my/')
@@ -101,3 +113,26 @@ def delete():
     session_deleter(weibo)
     flash('你的微博删除成功!')
     return redirect('/user/main_my/')
+
+
+@weibo_bp.route('/send_message/', methods=('POST',))
+@login_required
+def send_message():
+    """
+    评论微博
+    :return:
+    """
+    message = Message()
+    
+    message.fid = int(request.form.get('m_fid'))
+    message.iid = int(request.form.get('m_iid'))
+    message.yid = int(request.form.get('m_yid'))
+    if not request.form.get('m_content'):
+        return '评论内容不能为空'
+    message.content = request.form.get('m_content')
+    message.up_time = datetime.now()
+    
+    if session_add(message):
+        return '评论成功'
+    else:
+        return '评论失败'

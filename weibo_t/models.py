@@ -42,8 +42,8 @@ class Message(db.Model):
     __tablename__ = 'message'
     
     id = db.Column(db.Integer, primary_key=True)
-    fid = db.Column(db.Integer)
-    iid = db.Column(db.Integer)
-    yid = db.Column(db.Integer)
+    fid = db.Column(db.Integer)   # 微博id
+    iid = db.Column(db.Integer)   # 当前评论人id
+    yid = db.Column(db.Integer)   # 评论对象的id
     content = db.Column(db.Text, nullable=False)
-    up_time = db.Column(db.DateTime, default=datetime.now())
+    up_time = db.Column(db.DateTime, default=datetime.now())  # 评论时间
