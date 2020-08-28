@@ -1,0 +1,40 @@
+
+.u_icon {
+    width: 80px;
+    height: 80px;
+    padding: 3px;
+    border: 1px outset #ccc;
+    border-radius: 4px;
+    margin-right: 12px;
+
+}
+
+.father {
+    padding: 30px 60px;
+}
+
+.my_fans_n {
+
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 80px;
+    border-bottom: 2px solid #666666;
+    padding: 20px 0;
+}
+
+.img_show {
+    height: 200px;
+    border: 1px outset #dddddd;
+    padding: 5px;
+    margin: 5px 50px;
+    border-radius: 4px;
+}
+
+.info {
+    padding: 20px 36px;
+}
+
+.span1 {
+    font-size: 17px;
+    font-weight: 600;
+}

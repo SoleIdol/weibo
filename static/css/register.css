@@ -1,0 +1,25 @@
+
+.form_div {
+    border-right: 1px solid #dddddd;
+}
+
+.form {
+    padding: 20px 60px 70px;
+}
+
+.hy {
+    font-size: 40px;
+    font-family: 华文行楷;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 36px;
+}
+
+.bg {
+    width: 100%;
+    margin: 50px auto;
+}
+
+.container {
+    margin-top: 36px;
+}

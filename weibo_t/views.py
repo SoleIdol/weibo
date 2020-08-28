@@ -263,7 +263,6 @@ def fans():
 
 
 @weibo_bp.route('/hot/')
-@login_required
 def hot():
     """
     热门微博展示
