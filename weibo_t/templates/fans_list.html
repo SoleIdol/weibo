@@ -37,6 +37,7 @@
             color: #333333;
             padding-left: 18px;
         }
+
     </style>
 {% endblock %}
 
@@ -46,7 +47,7 @@
         {% for fans in fans_list %}
             <div class="media">
                 <div class="media-left">
-                    <a href="#">
+                    <a href="/user/fans_info/?fans_id={{ fans.id }}">
                         <img class="media-object u_icon" src="/static/upload/img/{{ user.head }}" alt="...">
                     </a>
                 </div>

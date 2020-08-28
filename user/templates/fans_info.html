@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block ext_css %}
+    <style>
+        .u_icon {
+            width: 80px;
+            height: 80px;
+            padding: 3px;
+            border: 1px outset #ccc;
+            border-radius: 4px;
+            margin-right: 12px;
+
+        }
+
+        .father {
+            padding: 30px 60px;
+        }
+
+        .my_fans_n {
+
+            font-size: 30px;
+            font-weight: 600;
+            line-height: 80px;
+            border-bottom: 2px solid #666666;
+            padding: 20px 0;
+        }
+
+        .img_show {
+            height: 200px;
+            border: 1px outset #dddddd;
+            padding: 5px;
+            margin: 5px 50px;
+            border-radius: 4px;
+        }
+
+        .info {
+            padding: 20px 36px;
+        }
+
+        .span1 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="father">
+        <p class="my_fans_n">
+            <img src="/static/upload/img/{{ user.head }}" class="u_icon">
+            <span>{{ user.name }}</span>
+        </p>
+        <div class="info">
+            <p>
+                <span class="span1">性别：</span>
+                {% if user.gender == '男' %}
+                    小哥哥
+                {% elif user.gender == '女' %}
+                    小姐姐
+                {% else %}
+                    就不告诉你！哼~
+                {% endif %}
+            </p>
+            <p><span class="span1">城市：</span>{{ user.city }}</p>
+            <p><span class="span1">头像：</span></p>
+            <img src="/static/upload/img/{{ user.head }}" class="img_show">
+            <p><span class="span1">粉丝数：</span>{{ user.n_fans }}</p>
+            <p><span class="span1">关注人数：</span>{{ n_idol }}</p>
+            <p><span class="span1">出生日期：</span>{{ user.birthday }}</p>
+            <p><span class="span1">注册日期：</span>{{ user.reg_time }}</p>
+        </div>
+
+    </div>
+{% endblock %}

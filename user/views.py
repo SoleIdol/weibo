@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, redirect, request, flash, session
 from math import ceil
 
 from user.models import User
-from weibo_t.models import Weibo, Message
+from weibo_t.models import Weibo, Message, Idol
 from libs.orm import db
 from libs.tools import login_required, save_file, del_head, make_password, check_password
 from libs.sqltools import session_add, session_update1
@@ -154,3 +154,16 @@ def logout():
     """退出登录"""
     session.clear()
     return redirect('/user/login/')
+
+
+@user_bp.route('/fans_info/')
+@login_required
+def fans_info():
+    """不可编辑用户信息展示"""
+    fans_id = request.args.get('fans_id')
+    user = User.query.get(fans_id)
+    if not user:
+        flash('抱歉，此用户已不存在')
+        return redirect(request.path)
+    n_idol = Idol.query.filter_by(fans_id=fans_id).count()
+    return render_template('fans_info.html', title='用户信息', user=user, n_idol=n_idol)

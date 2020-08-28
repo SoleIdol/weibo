@@ -260,3 +260,4 @@ def fans():
         return redirect('/user/login/')
     fans_list = Idol.fans_list(user.id)
     return render_template('fans_list.html', title='我的粉丝', user=user, fans_list=fans_list)
+
