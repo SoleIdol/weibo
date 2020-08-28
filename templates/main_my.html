@@ -110,14 +110,31 @@
                     <span class="username">{{ wuser.User.name }}</span>
                     <span class="uptime">{{ wuser.Weibo.up_time }}</span>
 
-                    <button type="button" class="btn btn-default btn-xs" onclick="guan_zhu({{ wuser.User.id }})">
-                        <div class="guan_zhu_f{{ wuser.User.id }}">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注
-                        </div>
-                        <div class="guan_zhu_t{{ wuser.User.id }}" hidden>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>已关注
-                        </div>
-                    </button>
+{#                    <button type="button" class="btn btn-default btn-xs" onclick="guan_zhu({{ wuser.User.id }})">#}
+{#                        <div class="guan_zhu_f{{ wuser.User.id }}">#}
+{#                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注#}
+{#                        </div>#}
+{#                        <div class="guan_zhu_t{{ wuser.User.id }}" hidden>#}
+{#                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>已关注#}
+{#                        </div>#}
+{#                    </button>#}
+                    {% if user.id not in wuser.Weibo.fans_list %}
+                        <form action="/weibo/fans_add/" method="post" style="display: inline">
+                            <input type="hidden" name="idol_id" value="{{ wuser.Weibo.uid }}">
+                            <input type="hidden" name="fans_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注
+                            </button>
+                        </form>
+                    {% else %}
+                        <form action="/weibo/fans_del/" method="post" style="display: inline">
+                            <input type="hidden" name="idol_id" value="{{ wuser.Weibo.uid }}">
+                            <input type="hidden" name="fans_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>已关注
+                            </button>
+                        </form>
+                    {% endif %}
 
 
                 </div>

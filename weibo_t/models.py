@@ -25,6 +25,12 @@ class Weibo(db.Model):
         z_list = [thumb.uid for thumb in thumbs]
         return z_list
     
+    @property
+    def fans_list(self):
+        fans = Idol.query.filter_by(idol_id=self.uid).all()
+        fen_list = [fen.fans_id for fen in fans]
+        return fen_list
+    
     @classmethod
     def make_weibo(cls, num, list):
         weibos = []
@@ -73,3 +79,10 @@ class Thumb(db.Model):
     
     wid = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, primary_key=True)
+
+
+class Idol(db.Model):
+    __tablename__ = 'idol'
+    
+    idol_id = db.Column(db.Integer, primary_key=True)
+    fans_id = db.Column(db.Integer, primary_key=True)

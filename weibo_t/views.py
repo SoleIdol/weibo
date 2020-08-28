@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, flash, session
 from datetime import datetime
 from sqlalchemy import and_
 
-from weibo_t.models import Weibo, Message, Thumb
+from weibo_t.models import Weibo, Message, Thumb, Idol
 from user.models import User
 from libs.orm import db
 from libs.tools import login_required, save_file
@@ -141,6 +141,7 @@ def send_message():
 
 
 @weibo_bp.route('/zan_add/', methods=('POST',))
+@login_required
 def zan_add():
     wid = request.form.get('wid')
     uid = request.form.get('uid')
@@ -154,6 +155,7 @@ def zan_add():
 
 
 @weibo_bp.route('/zan_del/', methods=('POST',))
+@login_required
 def zan_del():
     wid = request.form.get('wid')
     uid = request.form.get('uid')
@@ -162,5 +164,34 @@ def zan_del():
         weibo = Weibo.query.get(wid)
         weibo.zan_num -= 1
         session_update1(weibo)
+    
+    return redirect('/user/main_my/')
+
+
+@weibo_bp.route('/fans_add/', methods=('POST',))
+@login_required
+def fans_add():
+    idol_id = request.form.get('idol_id')
+    fans_id = request.form.get('fans_id')
+    fans = Idol(idol_id=idol_id, fans_id=fans_id)
+    if session_add(fans):
+        user = User.query.get(idol_id)
+        user.n_fans += 1
+        session_update1(user)
+    
+    return redirect('/user/main_my/')
+
+
+@weibo_bp.route('/fans_del/', methods=('POST',))
+@login_required
+def fans_del():
+    idol_id = request.form.get('idol_id')
+    fans_id = request.form.get('fans_id')
+    print(idol_id,fans_id)
+    fans = Idol.query.filter(and_(Idol.idol_id == idol_id, Idol.fans_id == fans_id)).one()
+    if session_deleter(fans):
+        user = User.query.get(idol_id)
+        user.n_fans -= 1
+        session_update1(user)
     
     return redirect('/user/main_my/')

@@ -40,6 +40,7 @@ def main():
 
 @manage.command
 def create_test():
+    """创建测试数据"""
     users = User.make_users(50)
     Weibo.make_weibo(2000, users)
 
