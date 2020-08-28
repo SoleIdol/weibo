@@ -16,7 +16,7 @@ from weibo_t.models import Weibo
 app = Flask(__name__)
 
 app.secret_key = "!@#%SDFGDSF%$^adf3465dfsdsfg567#@$^_&DG4"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sole:000210wibt@localhost:3306/weibo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://demon:123456@localhost:3306/weibo'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db.init_app(app)
