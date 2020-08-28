@@ -67,8 +67,8 @@
                             <li class=" {% if request.path == '/weibo/edit/' %}active{% endif %}">
                                 <a href="/weibo/edit/">发表</a>
                             </li>
-                            <li>
-                                <a href="#">已发布</a>
+                            <li class=" {% if request.path == '/weibo/release/' %}active{% endif %}">
+                                <a href="/weibo/release/">已发布</a>
                             </li>
                             <li class=" {% if request.path == '/weibo/fans/' %}active{% endif %}">
                                 <a href="/weibo/fans/">我的粉丝</a>
