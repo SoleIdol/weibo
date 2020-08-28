@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="icon" href="/static/img/wb_icon.jpg">
+    <link rel="icon" href="/static/img/wb_logo.png">
     <link rel="stylesheet" href="/static/css/bootstrap.css">
     <script src="/static/js/jquery-3.5.1.js"></script>
     <style>
@@ -35,6 +35,18 @@
         }
 
 
+        .wb_log{
+            height: 36px;
+        }
+        .nav_head{
+            color: #666666;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 8px 30px 0 10px;
+        }
+        .mini {
+            margin-top: 10px;
+        }
     </style>
     <!-- 页面独有样式 -->
     {% block ext_css %}
@@ -47,8 +59,9 @@
         <nav class="navbar navbar-default" style="background-color: #f8efc0;">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <span class="navbar-brand glyphicon glyphicon-xbt" aria-hidden="true"></span>
+                <div class="navbar-header nav_head">
+                    <img src="/static/img/wb_logo.png" class="wb_log">
+                    <span class="mini">迷你微博</span>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

@@ -107,7 +107,7 @@ def main_my():
     # 注意，这里有个范围查询 in_()
     msgs = Message.query.filter(Message.fid.in_(wb_list)).order_by(Message.up_time.desc()).all()
     
-    return render_template('main_my.html', title='用户博客界面', user=user, weibo_user=weibo_user, msgs=msgs,
+    return render_template('main_my.html', title='迷你微博', user=user, weibo_user=weibo_user, msgs=msgs,
                            pages=pages, page=page, start=start, end=end, max_page=max_page)
 
 
