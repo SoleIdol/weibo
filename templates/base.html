@@ -58,11 +58,8 @@
                             <li class=" {% if request.path == '/user/main_my/' %}active{% endif %}">
                                 <a href="/user/main_my/">首页</a>
                             </li>
-                            <li>
-                                <a href="#">热门</a>
-                            </li>
-                            <li>
-                                <a href="#">发现</a>
+                            <li class=" {% if request.path == '/weibo/hot/' %}active{% endif %}">
+                                <a href="/weibo/hot/">热门</a>
                             </li>
                             <li class=" {% if request.path == '/weibo/idol/' %}active{% endif %}">
                                 <a href="/weibo/idol/">关注</a>

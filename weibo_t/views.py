@@ -1,7 +1,7 @@
 from math import ceil
 
 from flask import Blueprint, render_template, redirect, request, flash, session
-from datetime import datetime
+import datetime
 from sqlalchemy import and_
 
 from weibo_t.models import Weibo, Message, Thumb, Idol
@@ -36,8 +36,8 @@ def edit():
                 return render_template('edit.html', title='微博编辑', user=user)
             public = bool(int(request.form.get('public')))
             
-            cr_time = datetime.now()
-            up_time = datetime.now()
+            cr_time = datetime.datetime.now()
+            up_time = datetime.datetime.now()
             weibo = Weibo(
                 uid=uid, content=content, public=public,
                 up_time=up_time, cr_time=cr_time
@@ -82,7 +82,7 @@ def update():
         # 你可以编辑
         if request.method == 'POST':
             weibo.content = request.form.get('content')
-            weibo.up_time = datetime.now()
+            weibo.up_time = datetime.datetime.now()
             weibo.public = bool(int(request.form.get('public')))
             file = request.files.get('file')
             # 如果有文件就保存
@@ -133,7 +133,7 @@ def send_message():
     if not request.form.get('m_content'):
         return '评论内容不能为空'
     message.content = request.form.get('m_content')
-    message.up_time = datetime.now()
+    message.up_time = datetime.datetime.now()
     
     if session_add(message):
         flash('评论成功')
@@ -261,3 +261,30 @@ def fans():
     fans_list = Idol.fans_list(user.id)
     return render_template('fans_list.html', title='我的粉丝', user=user, fans_list=fans_list)
 
+
+@weibo_bp.route('/hot/')
+@login_required
+def hot():
+    """
+    热门微博展示
+    最近30天的微博
+    点赞数量最多的微博
+    为优化，还是每次刷新都会查询一次数据库
+    """
+    try:
+        user = User.query.filter_by(name=session.get('u_name')).one()
+    except:
+        flash('后台未检测到你的存在，请重新登录...')
+        return redirect('/user/login/')
+    # 计算30天前的日期
+    time = datetime.datetime.now() - datetime.timedelta(days=30)
+    # 联合User Weibo两个表
+    quer = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id)
+    quer2 = quer.filter(Weibo.up_time > time).order_by(Weibo.zan_num.desc())
+    weibo_user = quer2.limit(50).all()
+    
+    wb_list = [wu.Weibo.id for wu in weibo_user]
+    # 注意，这里有个范围查询 in_()
+    msgs = Message.query.filter(Message.fid.in_(wb_list)).order_by(Message.up_time.desc()).all()
+    
+    return render_template('hot.html', title='热门微博', user=user, weibo_user=weibo_user, msgs=msgs)
