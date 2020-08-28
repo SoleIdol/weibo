@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, flash, session
 from datetime import datetime
+from sqlalchemy import and_
 
-from weibo_t.models import Weibo, Message
+from weibo_t.models import Weibo, Message, Thumb
 from user.models import User
 from libs.orm import db
 from libs.tools import login_required, save_file
@@ -136,4 +137,30 @@ def send_message():
         flash('评论成功')
     else:
         flash('评论失败')
+    return redirect('/user/main_my/')
+
+
+@weibo_bp.route('/zan_add/', methods=('POST',))
+def zan_add():
+    wid = request.form.get('wid')
+    uid = request.form.get('uid')
+    thumb = Thumb(uid=uid, wid=wid)
+    if session_add(thumb):
+        weibo = Weibo.query.get(wid)
+        weibo.zan_num += 1
+        session_update1(weibo)
+    
+    return redirect('/user/main_my/')
+
+
+@weibo_bp.route('/zan_del/', methods=('POST',))
+def zan_del():
+    wid = request.form.get('wid')
+    uid = request.form.get('uid')
+    thumb = Thumb.query.filter(and_(Thumb.uid == uid, Thumb.wid == wid)).one()
+    if session_deleter(thumb):
+        weibo = Weibo.query.get(wid)
+        weibo.zan_num -= 1
+        session_update1(weibo)
+    
     return redirect('/user/main_my/')

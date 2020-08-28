@@ -19,6 +19,12 @@ class Weibo(db.Model):
     cr_time = db.Column(db.DateTime)
     up_time = db.Column(db.DateTime)
     
+    @property
+    def zan_list(self):
+        thumbs = Thumb.query.filter_by(wid=self.id).all()
+        z_list = [thumb.uid for thumb in thumbs]
+        return z_list
+    
     @classmethod
     def make_weibo(cls, num, list):
         weibos = []
@@ -60,3 +66,10 @@ class Message(db.Model):
     @classmethod
     def by_wid(cls, fid):
         return Weibo.query.get(fid)
+
+
+class Thumb(db.Model):
+    __tablename__ = 'thumb'
+    
+    wid = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, primary_key=True)

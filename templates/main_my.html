@@ -136,10 +136,24 @@
                             {{ wuser.Weibo.zan_num }}
 
                             &nbsp;&nbsp;&nbsp;
+                            {% if user.id not in wuser.Weibo.zan_list %}
+                                <form action="/weibo/zan_add/" method="post" style="display: inline">
+                                    <input type="hidden" name="wid" value="{{ wuser.Weibo.id }}">
+                                    <input type="hidden" name="uid" value="{{ user.id }}">
+                                    <button type="submit" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>点赞
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form action="/weibo/zan_del/" method="post" style="display: inline">
+                                    <input type="hidden" name="wid" value="{{ wuser.Weibo.id }}">
+                                    <input type="hidden" name="uid" value="{{ user.id }}">
+                                    <button type="submit" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>已赞
+                                    </button>
+                                </form>
+                            {% endif %}
 
-                            <button type="button" class="btn btn-default btn-xs">
-                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>点赞
-                            </button>
 
                             <button type="button" class="btn btn-default btn-xs "
                                     onclick="show_p({{ wuser.Weibo.id }})">
@@ -253,6 +267,22 @@
     <script>
         var show_flag = false
         var gz_flag = false
+        var zan_flag = false
+
+        /*
+        function zan(wid) {
+            zan_flag = !zan_flag
+            if (zan_flag) {
+                $('#zan_form' + wid).attr('action', '/weibo/zan_add/')
+                $('.zan_t' + wid).attr('hidden', true)
+                $('.zan_f' + wid).attr('hidden', false)
+            } else {
+                $('#zan_form' + wid).attr('action', '/weibo/zan_del/')
+                $('.zan_t' + wid).attr('hidden', false)
+                $('.zan_f' + wid).attr('hidden', true)
+            }
+        }
+        */
 
         function guan_zhu(uid) {
             gz_flag = !gz_flag
@@ -265,7 +295,6 @@
             }
 
         }
-
 
         function show_p(wid) {
             show_flag = !show_flag
