@@ -1,3 +1,5 @@
+from math import ceil
+
 from flask import Blueprint, render_template, redirect, request, flash, session
 from datetime import datetime
 from sqlalchemy import and_
@@ -143,6 +145,7 @@ def send_message():
 @weibo_bp.route('/zan_add/', methods=('POST',))
 @login_required
 def zan_add():
+    """点赞"""
     wid = request.form.get('wid')
     uid = request.form.get('uid')
     thumb = Thumb(uid=uid, wid=wid)
@@ -150,13 +153,16 @@ def zan_add():
         weibo = Weibo.query.get(wid)
         weibo.zan_num += 1
         session_update1(weibo)
-    
-    return redirect('/user/main_my/')
+    if int(request.form.get('is_main')):
+        return redirect('/user/main_my/')
+    else:
+        return redirect('/weibo/idol/')
 
 
 @weibo_bp.route('/zan_del/', methods=('POST',))
 @login_required
 def zan_del():
+    """取消赞"""
     wid = request.form.get('wid')
     uid = request.form.get('uid')
     thumb = Thumb.query.filter(and_(Thumb.uid == uid, Thumb.wid == wid)).one()
@@ -165,12 +171,16 @@ def zan_del():
         weibo.zan_num -= 1
         session_update1(weibo)
     
-    return redirect('/user/main_my/')
+    if int(request.form.get('is_main')):
+        return redirect('/user/main_my/')
+    else:
+        return redirect('/weibo/idol/')
 
 
 @weibo_bp.route('/fans_add/', methods=('POST',))
 @login_required
 def fans_add():
+    """关注idol"""
     idol_id = request.form.get('idol_id')
     fans_id = request.form.get('fans_id')
     fans = Idol(idol_id=idol_id, fans_id=fans_id)
@@ -179,19 +189,60 @@ def fans_add():
         user.n_fans += 1
         session_update1(user)
     
-    return redirect('/user/main_my/')
+    if int(request.form.get('is_main')):
+        return redirect('/user/main_my/')
+    else:
+        return redirect('/weibo/idol/')
 
 
 @weibo_bp.route('/fans_del/', methods=('POST',))
 @login_required
 def fans_del():
+    """删除粉丝，取关"""
     idol_id = request.form.get('idol_id')
     fans_id = request.form.get('fans_id')
-    print(idol_id,fans_id)
+    print(idol_id, fans_id)
     fans = Idol.query.filter(and_(Idol.idol_id == idol_id, Idol.fans_id == fans_id)).one()
     if session_deleter(fans):
         user = User.query.get(idol_id)
         user.n_fans -= 1
         session_update1(user)
     
-    return redirect('/user/main_my/')
+    if int(request.form.get('is_main')):
+        return redirect('/user/main_my/')
+    else:
+        return redirect('/weibo/idol/')
+
+
+@weibo_bp.route('/idol/')
+@login_required
+def idol():
+    try:
+        user = User.query.filter_by(name=session.get('u_name')).one()
+    except:
+        flash('后台未检测到你的存在，请重新登录...')
+        return redirect('/user/login/')
+    
+    page = int(request.args.get('page', 1))
+    per_page = 30
+    offset = per_page * (page - 1)
+    # 联合User Weibo两个表
+    quer = db.session().query(User, Weibo).join(Weibo, Weibo.uid == User.id)
+    quer2 = quer.filter(User.id.in_(Idol.idol_list(user.id))).order_by(Weibo.up_time.desc())
+    weibo_user = quer2.limit(per_page).offset(offset).all()
+    max_page = ceil(quer2.count() / per_page)
+    if max_page <= 7:
+        start, end = 1, max_page
+    elif page <= 3:
+        start, end = 1, 7
+    elif page > (max_page - 3):
+        start, end = max_page - 6, max_page
+    else:
+        start, end = (page - 3), (page + 3)
+    pages = range(start, end + 1)
+    wb_list = [wu.Weibo.id for wu in weibo_user]
+    # 注意，这里有个范围查询 in_()
+    msgs = Message.query.filter(Message.fid.in_(wb_list)).order_by(Message.up_time.desc()).all()
+    
+    return render_template('idol.html', title='用户博客界面', user=user, weibo_user=weibo_user, msgs=msgs,
+                           pages=pages, page=page, start=start, end=end, max_page=max_page)

@@ -86,3 +86,9 @@ class Idol(db.Model):
     
     idol_id = db.Column(db.Integer, primary_key=True)
     fans_id = db.Column(db.Integer, primary_key=True)
+    
+    @classmethod
+    def idol_list(cls, uid):
+        idols = Idol.query.filter_by(fans_id=uid).all()
+        idol_l = [idol.idol_id for idol in idols]
+        return idol_l
