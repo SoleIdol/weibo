@@ -92,3 +92,12 @@ class Idol(db.Model):
         idols = Idol.query.filter_by(fans_id=uid).all()
         idol_l = [idol.idol_id for idol in idols]
         return idol_l
+    
+    @classmethod
+    def fans_list(cls, idol_id):
+        fans = Idol.query.filter_by(idol_id=idol_id).all()
+        fans_l = [fen.fans_id for fen in fans]
+        fans_user_l = User.query.filter(User.id.in_(fans_l))
+        return fans_user_l
+    
+    

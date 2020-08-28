@@ -29,17 +29,11 @@
             margin: auto;
         }
 
-        /*
-        .sidebar_l, .sidebar_r {
-            padding-bottom: 50px;
-            background-color: #eeeeee;
-        }
-         */
-
         .content {
             padding-bottom: 20px;
             background-color: #f5f5f5;
         }
+
 
     </style>
     <!-- 页面独有样式 -->
@@ -61,23 +55,28 @@
 
                     {% block nav_son1 %}
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="/user/main_my/">首页</a></li>
-                            <li><a href="#">视频</a></li>
-                            <li><a href="#">发现</a></li>
-                            <li><a href="#">游戏</a></li>
-                            <li><a href="#">同城</a></li>
-                            <li><a href="/weibo/idol/">关注</a></li>
-                            <li><a href="/weibo/edit/">发表</a></li>
-                            <li><a href="#">已发布</a></li>
+                            <li class=" {% if request.path == '/user/main_my/' %}active{% endif %}">
+                                <a href="/user/main_my/">首页</a>
+                            </li>
+                            <li>
+                                <a href="#">热门</a>
+                            </li>
+                            <li>
+                                <a href="#">发现</a>
+                            </li>
+                            <li class=" {% if request.path == '/weibo/idol/' %}active{% endif %}">
+                                <a href="/weibo/idol/">关注</a>
+                            </li>
+                            <li class=" {% if request.path == '/weibo/edit/' %}active{% endif %}">
+                                <a href="/weibo/edit/">发表</a>
+                            </li>
+                            <li>
+                                <a href="#">已发布</a>
+                            </li>
+                            <li class=" {% if request.path == '/weibo/fans/' %}active{% endif %}">
+                                <a href="/weibo/fans/">我的粉丝</a>
+                            </li>
                         </ul>
-                        <form action="#" class="navbar-form navbar-left">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="搜索">
-                            </div>
-                            <button type="submit" class="btn btn-default">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
-                        </form>
 
                     {% endblock %}
                     {% block nav_son2 %}

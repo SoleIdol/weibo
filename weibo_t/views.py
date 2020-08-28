@@ -217,6 +217,7 @@ def fans_del():
 @weibo_bp.route('/idol/')
 @login_required
 def idol():
+    """关注人的微博展示"""
     try:
         user = User.query.filter_by(name=session.get('u_name')).one()
     except:
@@ -244,5 +245,18 @@ def idol():
     # 注意，这里有个范围查询 in_()
     msgs = Message.query.filter(Message.fid.in_(wb_list)).order_by(Message.up_time.desc()).all()
     
-    return render_template('idol.html', title='用户博客界面', user=user, weibo_user=weibo_user, msgs=msgs,
+    return render_template('idol.html', title='我关注的人', user=user, weibo_user=weibo_user, msgs=msgs,
                            pages=pages, page=page, start=start, end=end, max_page=max_page)
+
+
+@weibo_bp.route('/fans/')
+@login_required
+def fans():
+    """用户粉丝展示"""
+    try:
+        user = User.query.filter_by(name=session.get('u_name')).one()
+    except:
+        flash('后台未检测到你的存在，请重新登录...')
+        return redirect('/user/login/')
+    fans_list = Idol.fans_list(user.id)
+    return render_template('fans_list.html', title='我的粉丝', user=user, fans_list=fans_list)

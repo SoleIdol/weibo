@@ -17,6 +17,7 @@ user_bp.static_folder = '../static'
 
 @user_bp.route('/login/', methods=('POST', 'GET'))
 def login():
+    """登录页面"""
     if request.method == 'POST':
         name = request.form.get('u_name')
         try:
@@ -37,6 +38,7 @@ def login():
 
 @user_bp.route('/register/', methods=('POST', 'GET'))
 def register():
+    """注册页面"""
     if request.method == 'POST':
         user = User()
         user.name = request.form.get('u_name')
@@ -77,6 +79,7 @@ def register():
 @user_bp.route('/main_my/')
 @login_required
 def main_my():
+    """首页所有微博展示"""
     try:
         user = User.query.filter_by(name=session.get('u_name')).one()
     except:
@@ -111,6 +114,7 @@ def main_my():
 @user_bp.route('/info/', methods=('POST', 'GET'))
 @login_required
 def user_info():
+    """用户信息"""
     try:
         user = User.query.filter_by(name=session.get('u_name')).one()
     except:
@@ -147,5 +151,6 @@ def user_info():
 
 @user_bp.route('/logout/')
 def logout():
+    """退出登录"""
     session.clear()
     return redirect('/user/login/')
