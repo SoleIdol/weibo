@@ -160,10 +160,15 @@ def logout():
 @login_required
 def fans_info():
     """不可编辑用户信息展示"""
+    try:
+        user = User.query.filter_by(name=session.get('u_name')).one()
+    except:
+        flash('后台未检测到你的存在，请重新登录...')
+        return redirect('/user/login/')
     fans_id = request.args.get('fans_id')
-    user = User.query.get(fans_id)
-    if not user:
+    f_user = User.query.get(fans_id)
+    if not f_user:
         flash('抱歉，此用户已不存在')
         return redirect(request.path)
     n_idol = Idol.query.filter_by(fans_id=fans_id).count()
-    return render_template('fans_info.html', title='用户信息', user=user, n_idol=n_idol)
+    return render_template('fans_info.html', title='用户信息', user=user, f_user=f_user, n_idol=n_idol)

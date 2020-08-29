@@ -6,27 +6,27 @@
 {% block content %}
     <div class="father">
         <p class="my_fans_n">
-            <img src="/static/upload/img/{{ user.head }}" class="u_icon">
-            <span>{{ user.name }}</span>
+            <img src="/static/upload/img/{{ f_user.head }}" class="u_icon">
+            <span>{{ f_user.name }}</span>
         </p>
         <div class="info">
             <p>
                 <span class="span1">性别：</span>
-                {% if user.gender == '男' %}
+                {% if f_user.gender == '男' %}
                     小哥哥
-                {% elif user.gender == '女' %}
+                {% elif f_user.gender == '女' %}
                     小姐姐
                 {% else %}
                     就不告诉你！哼~
                 {% endif %}
             </p>
-            <p><span class="span1">城市：</span>{{ user.city }}</p>
+            <p><span class="span1">城市：</span>{{ f_user.city }}</p>
             <p><span class="span1">头像：</span></p>
-            <img src="/static/upload/img/{{ user.head }}" class="img_show">
-            <p><span class="span1">粉丝数：</span>{{ user.n_fans }}</p>
+            <img src="/static/upload/img/{{ f_user.head }}" class="img_show">
+            <p><span class="span1">粉丝数：</span>{{ f_user.n_fans }}</p>
             <p><span class="span1">关注人数：</span>{{ n_idol }}</p>
-            <p><span class="span1">出生日期：</span>{{ user.birthday }}</p>
-            <p><span class="span1">注册日期：</span>{{ user.reg_time }}</p>
+            <p><span class="span1">出生日期：</span>{{ f_user.birthday }}</p>
+            <p><span class="span1">注册日期：</span>{{ f_user.reg_time }}</p>
         </div>
 
     </div>
